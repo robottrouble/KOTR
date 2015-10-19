@@ -6,10 +6,11 @@
 angular.module('kotr', ['ionic'])
 
 .controller('ChecklistCtrl', function($scope, $ionicModal) {
-    $scope.checklists = [
-        { title: 'Woodward 2016' },
-        { title: 'Woodward 2015' }
-    ];
+    $scope.checklists = [  { title: 'Get high enough to grab the flag' },
+    { title: 'Find the Princess' }];
+    $scope.teams = [];
+
+    $scope.selectedChecklist = null;
 
 // Create and load the Modal
     $ionicModal.fromTemplateUrl('/partials/new-checklist.html', function(modal) {
@@ -19,13 +20,39 @@ angular.module('kotr', ['ionic'])
         animation: 'slide-in-up'
     });
 
+    $ionicModal.fromTemplateUrl('/partials/select-checklist.html', function(modal) {
+        $scope.selectChecklistModal = modal;
+    }, {
+        scope: $scope,
+        animation: 'slide-in-up'
+    });
+
+  $scope.checkDefaultChecklist = function() {
+    alert("check");
+    if ($scope.selectedChecklist == null) {
+      // $scope.selectChecklistModal.show();
+    }
+  }
+
+  $scope.selectChecklist = function() {
+    $scope.selectChecklistModal.show();
+  }
+
+  $scope.setCurrentChecklist = function(checklist) {
+    $scope.selectedChecklist = checklist;
+    $scope.selectedChecklist.title = checklist.title;
+    $scope.selectChecklistModal.hide();
+  }
+
     // Called when the form is submitted
-  $scope.creatChecklist = function(checklists) {
+  $scope.createChecklist = function(checklist) {
     $scope.checklists.push({
-      title: checklist.title
+      title: checklist.title,
+      description: checklist.description
     });
     $scope.checklistModal.hide();
     checklist.title = "";
+    checklist.description = "";
   };
 
   // Open our new checklist modal

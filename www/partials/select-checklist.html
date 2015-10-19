@@ -1,0 +1,14 @@
+<div class="modal">
+<div class="bar bar-header bar-dark">
+    <h1 class="title">Default Checklist</h1>
+</div>
+<ion-content class="has-header">
+<ion-list>
+<ion-item ng-repeat="checklist in checklists" class="item item-icon-right item-avatar">
+<img src="https://scontent-lga3-1.xx.fbcdn.net/hphotos-xap1/v/t1.0-0/c0.0.50.50/p50x50/11229899_10153461353534930_6648475697616430253_n.jpg?oh=88579c098bbeb6cb512add463898ee44&oe=5688DA0E">
+{{checklist.title}}
+<i class="icon ion-chevron-right icon-accessory" ng-click="setCurrentChecklist(checklist)"></i>
+</ion-item>
+</ion-list>
+</ion-content>
+</div>

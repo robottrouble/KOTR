@@ -22,17 +22,21 @@
     <script src="js/app.js"></script>
 </head>
 <body ng-app="kotr">
-    <ion-tabs  class="tabs-dark tabs-icon-only">
+    <ion-tabs  class="tabs-dark tabs-icon-only" ng-controller="ChecklistCtrl">
     <!-- HOME -->
-        <!--
+
         <ion-tab title="Home" icon-on="ion-ios-home" icon-off="ion-ios-home-outline">
         <div class="bar bar-header bar-dark">
+            <button class="button button-clear icon ion-navicon-round" ng-click="selectChecklist()"></button>
             <h1 class="title">King of The Road</h1>
+            <button class="button button-clear icon ion-search" ng-click="searchItems()"></button>
+        </div>
+        <div class="bar bar-subheader">
+          <h2 class="title">{{selectedChecklist.title}}</h2>
         </div>
         </ion-tab>
-    -->
     <!-- CHECKLISTS -->
-    <ion-tab title="Checklists" icon-on="ion-ios-checkmark" icon-off="ion-ios-checkmark-outline" ng-controller="ChecklistCtrl">
+    <ion-tab title="Checklists" icon-on="ion-ios-checkmark" icon-off="ion-ios-checkmark-outline">
     <div class="bar bar-header bar-dark">
         <h1 class="title">Checklists</h1>
         <div class="buttons">
@@ -43,7 +47,7 @@
     <ion-list>
     <ion-item ng-repeat="checklist in checklists" class="item item-icon-right item-avatar">
     <img src="https://scontent-lga3-1.xx.fbcdn.net/hphotos-xap1/v/t1.0-0/c0.0.50.50/p50x50/11229899_10153461353534930_6648475697616430253_n.jpg?oh=88579c098bbeb6cb512add463898ee44&oe=5688DA0E">
-    {{checklist.title}} 
+    {{checklist.title}}
     <i class="icon ion-chevron-right icon-accessory"></i>
 </ion-item>
 </ion-list>
@@ -84,5 +88,6 @@
 </div>
 </ion-tab>
 </ion-tabs>
+
 </body>
 </html>
