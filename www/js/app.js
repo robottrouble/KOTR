@@ -3,36 +3,65 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('kotr', ['ionic'])
+angular.module("kotr", ["ionic", "firebase"])
 
-.controller('ChecklistCtrl', function($scope, $ionicModal) {
-    $scope.checklists = [  { title: 'Get high enough to grab the flag' },
-    { title: 'Find the Princess' }];
-    $scope.teams = [];
+.factory("Checklists", function($firebaseArray) {
+  var itemsRef = new Firebase("https://brilliant-torch-531.firebaseio.com/checklists");
+  return $firebaseArray(itemsRef);
+})
+
+.factory("Teams", function($firebaseArray) {
+  var itemsRef = new Firebase("https://brilliant-torch-531.firebaseio.com/teams");
+  return $firebaseArray(itemsRef);
+})
+
+.controller('TeamCtrl', function($scope, $ionicModal, Teams) {
+    $scope.teams = Teams;
+
+    $ionicModal.fromTemplateUrl('partials/new-team.html', function(modal) {
+        $scope.teamModal = modal;
+    }, {
+        scope: $scope,
+        animation: 'slide-in-up'
+    });
+
+    $scope.newTeam = function() {
+      $scope.teamModal.show();
+    }
+
+    $scope.createTeam = function(team) {
+      $scope.teams.$add({
+        name: team.name
+      });
+      $scope.teamModal.hide();
+      team.name = "";
+    }
+
+    $scope.closeNewTeam = function() {
+      $scope.teamModal.hide();
+      team.name = "";
+    }
+})
+
+.controller('ChecklistCtrl', function($scope, $ionicModal, Checklists) {
+    $scope.checklists = Checklists;
 
     $scope.selectedChecklist = null;
 
 // Create and load the Modal
-    $ionicModal.fromTemplateUrl('/partials/new-checklist.html', function(modal) {
+    $ionicModal.fromTemplateUrl('partials/new-checklist.html', function(modal) {
         $scope.checklistModal = modal;
     }, {
         scope: $scope,
         animation: 'slide-in-up'
     });
 
-    $ionicModal.fromTemplateUrl('/partials/select-checklist.html', function(modal) {
+    $ionicModal.fromTemplateUrl('partials/select-checklist.html', function(modal) {
         $scope.selectChecklistModal = modal;
     }, {
         scope: $scope,
         animation: 'slide-in-up'
     });
-
-  $scope.checkDefaultChecklist = function() {
-    alert("check");
-    if ($scope.selectedChecklist == null) {
-      // $scope.selectChecklistModal.show();
-    }
-  }
 
   $scope.selectChecklist = function() {
     $scope.selectChecklistModal.show();
@@ -46,7 +75,7 @@ angular.module('kotr', ['ionic'])
 
     // Called when the form is submitted
   $scope.createChecklist = function(checklist) {
-    $scope.checklists.push({
+    $scope.checklists.$add({
       title: checklist.title,
       description: checklist.description
     });
