@@ -7,4 +7,4 @@
 * gulp
 * bower
 
-### Or is [this](https://github.com/wesleyterry/KOTR.git) enough? 
+### Or is [this ionic link](http://ionicframework.com/) enough? 
