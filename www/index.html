@@ -27,8 +27,14 @@
     <!-- AngularFire -->
     <script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
 </head>
-<body ng-app="kotr">
-    <ion-tabs  class="tabs-dark tabs-icon-only" >
+<body ng-app="kotr" ng-controller="LoginCtrl">
+
+    <div ng-hide="authData">
+    <button class="button button-block button-positive ion-social-facebook-outline" ng-click="login()" ng-hide="authData">
+      Log In with Facebook
+    </button>
+  </div>
+    <ion-tabs  class="tabs-dark tabs-icon-only" ng-show="authData">
     <!-- HOME -->
 
         <ion-tab title="Home" icon-on="ion-ios-home" icon-off="ion-ios-home-outline" ng-controller="ChecklistCtrl">
@@ -90,6 +96,9 @@
 <ion-tab title="Activity" icon-on="ion-ios-star" icon-off="ion-ios-star-outline">
 <div class="bar bar-header bar-dark">
     <h1 class="title">Activity</h1>
+    <div class="buttons">
+        <button class="button button-clear icon ion-log-out" ng-click="logout()"></button>
+    </div>
 </div>
 </ion-tab>
 </ion-tabs>
