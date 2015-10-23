@@ -3,7 +3,12 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module("kotr", ["ionic", "firebase"])
+var kotr = angular.module("kotr", ["ionic", "firebase", "ngCordovaOauth"])
+
+kotr.config(function($ionicConfigProvider) {
+  $ionicConfigProvider.tabs.position('bottom')
+})
+
 
 .factory("Checklists", function($firebaseArray) {
   var itemsRef = new Firebase("https://brilliant-torch-531.firebaseio.com/checklists");
@@ -19,7 +24,6 @@ angular.module("kotr", ["ionic", "firebase"])
   var usersRef = new Firebase("https://brilliant-torch-531.firebaseio.com/users");
   return $firebaseAuth(usersRef);
 })
-// https://auth.firebase.com/v2/brilliant-torch-531/auth/facebook/callback
 
 .controller('TeamCtrl', function($scope, $ionicModal, Teams, Auth) {
   $scope.teams = Teams;
@@ -103,29 +107,30 @@ angular.module("kotr", ["ionic", "firebase"])
   };
 })
 
-.controller('LoginCtrl', function($scope, $ionicModal, Checklists, Auth) {
+.controller('LoginCtrl', function($scope, $ionicModal, Checklists, Auth, $cordovaOauth) {
   $scope.login = function() {
-  //  alert("login");
+    console.log("login");
     Auth.$authWithOAuthRedirect("facebook").then(function(authData) {
-    //  alert("logged in");
+    console.log("logged in");
       // User successfully logged in
     }).catch(function(error) {
-  //    alert("error");
+      console.log("error");
       if (error.code === "TRANSPORT_UNAVAILABLE") {
-        alert("popup");
-        Auth.$authWithOAuthPopup("facebook").then(function(authData) {
-          // User successfully logged in. We can log to the console
-          // since we’re using a popup here
-          console.log(authData);
-          alert(authData);
+        $cordovaOauth.facebook("704293916339415", ["email"]).then(function(result) {
+            Auth.$authWithOAuthToken("facebook", result.access_token).then(function(authData) {
+                console.log(JSON.stringify(authData));
+            }, function(error) {
+                console.error("ERROR: " + error);
+            });
+        }, function(error) {
+            console.log("ERROR: " + error);
         });
       } else {
-    //    alert("error2");
         // Another error occurred
         console.log(error);
       }
     });
-  //  alert("done");
+    console.log("login() done");
   };
 
   $scope.logout = function() {
