@@ -5,8 +5,76 @@
 // the 2nd parameter is an array of 'requires'
 var kotr = angular.module("kotr", ["ionic", "firebase", "ngCordovaOauth"])
 
-kotr.config(function($ionicConfigProvider) {
+kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
   $ionicConfigProvider.tabs.position('bottom')
+  $stateProvider
+  .state('main', {
+    url: "/main",
+    abstract: true,
+    templateUrl: "main.html"
+  })
+
+  .state('main.tabs', {
+    url: "/tab",
+    abstract: true,
+    views: {
+      'main': {
+        templateUrl: "tabs.html",
+        controller: 'ChecklistCtrl'
+      }
+    }
+  })
+  .state('main.tabs.home', {
+    url: "/home",
+    views: {
+      'home-tab': {
+        templateUrl: "home.html"
+      }
+    }
+  })
+.state('main.tabs.checklists', {
+    url: "/checklists",
+    views: {
+      'checklists-tab': {
+        templateUrl: "checklists.html"
+      }
+    }
+  })
+  .state('main.tabs.teams', {
+      url: "/teams",
+      views: {
+        'teams-tab': {
+          templateUrl: "teams.html"
+        }
+      }
+    })
+  .state('main.tabs.activity', {
+    url: "/activity",
+    views: {
+      'activity-tab': {
+        templateUrl: "activity.html"
+      }
+    }
+  })
+  .state('main.tabs.checklist', {
+      url: "/checklist/:checklistId",
+      views: {
+        'checklists-tab': {
+          templateUrl: "checklist.html"
+        }
+      },
+      resolve: {
+        checklist: function($stateParams, Checklists) {
+          return Checklists.$getRecord($stateParams.checklistId)
+        }
+  }
+    })
+  .state('checklist', {
+    url: '/checklist',
+    templateUrl: '/tabs/checklist.html'
+  })
+
+  $urlRouterProvider.otherwise("/main/tab/home");
 })
 
 
@@ -107,7 +175,8 @@ kotr.config(function($ionicConfigProvider) {
   };
 })
 
-.controller('LoginCtrl', function($scope, $ionicModal, Checklists, Auth, $cordovaOauth) {
+.controller('LoginCtrl', function($scope, $ionicModal, Checklists, Auth, $cordovaOauth, $ionicSideMenuDelegate) {
+
   $scope.login = function() {
     console.log("login");
     Auth.$authWithOAuthRedirect("facebook").then(function(authData) {

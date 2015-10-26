@@ -1,0 +1,13 @@
+<ion-view title="King of The Road" left-buttons="leftButtons">
+  <ion-nav-buttons side="left">
+    <button class="button button-clear icon ion-navicon-round" ng-click="selectChecklist()" side="left"></button>
+  </ion-nav-buttons>
+
+  <ion-nav-buttons side="right">
+    <button class="button button-clear icon ion-search" ng-click="searchItems()" side="right"></button>
+  </ion-nav-buttons>
+
+  <div class="bar bar-subheader">
+    <h2 class="title">{{selectedChecklist.title}}</h2>
+  </div>
+</ion-view>
