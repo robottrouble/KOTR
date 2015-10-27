@@ -63,15 +63,6 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
           templateUrl: "checklist.html"
         }
       },
-      resolve: {
-        checklist: function($stateParams, Checklists) {
-          return Checklists.$getRecord($stateParams.checklistId)
-        }
-  }
-    })
-  .state('checklist', {
-    url: '/checklist',
-    templateUrl: '/tabs/checklist.html'
   })
 
   $urlRouterProvider.otherwise("/main/tab/home");
@@ -121,11 +112,9 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
   }
 })
 
-.controller('ChecklistCtrl', function($scope, $ionicModal, Checklists, Auth) {
-
-
+.controller('ChecklistCtrl', function($scope, $ionicModal, $stateParams, Checklists, Auth) {
   $scope.checklists = Checklists;
-
+  $scope.checklistId = $stateParams.checklistId;
   $scope.selectedChecklist = null;
 
   // Create and load the Modal
