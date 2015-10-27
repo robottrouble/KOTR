@@ -211,7 +211,6 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
   };
 
   $scope.newChecklistItem = function(groupId) {
-    alert(groupId);
     $scope.groupId = groupId;
     $scope.checklistItemModal.show();
   };

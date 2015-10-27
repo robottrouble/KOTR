@@ -8,9 +8,9 @@
     <ion-list>
       <div ng-repeat="(key, group) in checklists[checklistId].itemGroups">
         <ion-item class="item-stable"
+        ng-click="toggleGroup(group)"
         ng-class="{active: isGroupShown(group)}">
-        <i class="icon" ng-class="isGroupShown(group) ? 'ion-minus' : 'ion-plus'"
-        ng-click="toggleGroup(group)"></i>
+        <i class="icon" ng-class="isGroupShown(group) ? 'ion-minus' : 'ion-plus'"></i>
         &nbsp;
         {{group.title}}
       </ion-item>
