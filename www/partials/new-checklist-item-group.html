@@ -1,0 +1,25 @@
+<div class="modal">
+
+    <!-- Modal header bar -->
+    <ion-header-bar class="bar-secondary">
+    <h1 class="title">New Checklist Group</h1>
+    <button class="button button-clear button-positive" ng-click="closeNewChecklistItemGroup()">Cancel</button>
+</ion-header-bar>
+
+<!-- Modal content area -->
+<ion-content>
+
+<form ng-submit="createChecklistItemGroup(checklistId, checklistGroup)">
+    <div class="list">
+        <label class="item item-input">
+            <input type="text" placeholder="Name" ng-model="checklistGroup.title">
+        </label>
+    </div>
+    <div class="padding">
+        <button type="submit" class="button button-block button-positive">Create Group</button>
+    </div>
+</form>
+
+</ion-content>
+
+</div>

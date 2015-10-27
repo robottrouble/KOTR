@@ -1,3 +1,29 @@
 <!-- The title of the ion-view will be shown on the navbar -->
 <ion-view view-title="{{checklists[checklistId].title}}" left-buttons="leftButtons" ng-controller="ChecklistCtrl">
+  <ion-nav-buttons side="right">
+    <button class="button button-clear icon ion-ios-plus-outline" ng-click="newChecklistItemGroup()" side="right"></button>
+  </ion-nav-buttons>
+
+  <ion-content class="has-header">
+    <ion-list>
+      <div ng-repeat="(key, group) in checklists[checklistId].itemGroups">
+        <ion-item class="item-stable"
+        ng-class="{active: isGroupShown(group)}">
+        <i class="icon" ng-class="isGroupShown(group) ? 'ion-minus' : 'ion-plus'"
+        ng-click="toggleGroup(group)"></i>
+        &nbsp;
+        {{group.title}}
+      </ion-item>
+      <ion-item class="item-accordion" ng-show="isGroupShown(group)" ng-click="newChecklistItem(key)">
+        <b>New Item</b>
+        <i class="ion-ios-plus-outline icon item-icon-right"></i>
+      </ion-item>
+      <ion-item class="item-accordion"
+      ng-repeat="item in group.items"
+      ng-show="isGroupShown(group)">
+      {{item.title}}
+    </ion-item>
+  </div>
+</ion-list>
+</ion-content>
 </ion-view>

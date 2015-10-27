@@ -1,10 +1,7 @@
 <ion-view title="Checklists" left-buttons="leftButtons">
-  <div class="bar bar-header bar-dark">
-    <h1 class="title">Checklists</h1>
-    <div class="buttons">
+  <ion-nav-buttons side="right">
       <button class="button button-clear icon ion-ios-plus-outline" ng-click="newChecklist()"></button>
-    </div>
-  </div>
+  </ion-nav-buttons>
   <ion-content class="has-header">
     <ion-list>
       <ion-item ng-repeat="(key, checklist) in checklists" class="item item-icon-right item-avatar" ui-sref="main.tabs.checklist({checklistId: key})">

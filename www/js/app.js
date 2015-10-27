@@ -125,6 +125,20 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
     animation: 'slide-in-up'
   });
 
+  $ionicModal.fromTemplateUrl('partials/new-checklist-item-group.html', function(modal) {
+    $scope.checklistItemGroupModal = modal;
+  }, {
+    scope: $scope,
+    animation: 'slide-in-up'
+  });
+
+  $ionicModal.fromTemplateUrl('partials/new-checklist-item.html', function(modal) {
+    $scope.checklistItemModal = modal;
+  }, {
+    scope: $scope,
+    animation: 'slide-in-up'
+  });
+
   $ionicModal.fromTemplateUrl('partials/select-checklist.html', function(modal) {
     $scope.selectChecklistModal = modal;
   }, {
@@ -153,6 +167,39 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
     checklist.description = "";
   };
 
+  $scope.createChecklistItem = function(checklistId, groupId, checklistItem) {
+    var cl = Checklists[checklistId];
+    if (cl.itemGroups[groupId].items === null || cl.itemGroups[groupId].items === undefined)
+      cl.itemGroups[groupId].items = [];
+
+    cl.itemGroups[groupId].items.push(checklistItem);
+    Checklists.$save(cl);
+    $scope.groupId = null;
+    $scope.checklistItemModal.hide();
+    checklistItem.title = "";
+    checklistItem.description = "";
+  };
+  $scope.toggleGroup = function(group) {
+    if ($scope.isGroupShown(group)) {
+      $scope.shownGroup = null;
+    } else {
+      $scope.shownGroup = group;
+    }
+  };
+  $scope.isGroupShown = function(group) {
+    return $scope.shownGroup === group;
+  };
+
+  $scope.createChecklistItemGroup = function(checklistId, checklistGroup) {
+    var cl = Checklists[checklistId];
+    if (cl.itemGroups === null || cl.itemGroups === undefined)
+      cl.itemGroups = [];
+    cl.itemGroups.push(checklistGroup);
+    Checklists.$save(cl);
+    $scope.checklistItemGroupModal.hide();
+    checklistGroup.title = "";
+  }
+
   // Open our new checklist modal
   $scope.newChecklist = function() {
     $scope.checklistModal.show();
@@ -162,6 +209,26 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
   $scope.closeNewChecklist = function() {
     $scope.checklistModal.hide();
   };
+
+  $scope.newChecklistItem = function(groupId) {
+    alert(groupId);
+    $scope.groupId = groupId;
+    $scope.checklistItemModal.show();
+  };
+
+  $scope.closeNewChecklistItem = function() {
+    $scope.groupId = null;
+    $scope.checklistItemModal.hide();
+  };
+
+  $scope.newChecklistItemGroup = function() {
+    $scope.checklistItemGroupModal.show();
+  };
+
+  $scope.closeNewChecklistItemGroup = function() {
+    $scope.checklistItemGroupModal.hide();
+  };
+
 })
 
 .controller('LoginCtrl', function($scope, $ionicModal, Checklists, Auth, $cordovaOauth, $ionicSideMenuDelegate) {
