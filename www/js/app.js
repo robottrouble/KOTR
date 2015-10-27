@@ -24,11 +24,11 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
       }
     }
   })
-  .state('main.tabs.home', {
-    url: "/home",
+  .state('main.tabs.checkitems', {
+    url: "/checkitems",
     views: {
-      'home-tab': {
-        templateUrl: "home.html"
+      'checkitems-tab': {
+        templateUrl: "checklist.html"
       }
     }
   })
@@ -56,16 +56,16 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
       }
     }
   })
-  .state('main.tabs.checklist', {
+  .state('main.tabs.editChecklist', {
       url: "/checklist/:checklistId",
       views: {
         'checklists-tab': {
-          templateUrl: "checklist.html"
+          templateUrl: "checklist_edit.html"
         }
       },
   })
 
-  $urlRouterProvider.otherwise("/main/tab/home");
+  $urlRouterProvider.otherwise("/main/tab/activity");
 })
 
 
