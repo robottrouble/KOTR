@@ -1,14 +1,12 @@
 <div class="modal">
-
     <!-- Modal header bar -->
     <ion-header-bar class="bar-secondary">
     <h1 class="title">New Team</h1>
-    <button class="button button-clear button-positive" ng-click="closeNewTeam()">Cancel</button>
+    <button class="button button-clear button-positive" ng-click="closeNewTeam(team)">Cancel</button>
 </ion-header-bar>
 
 <!-- Modal content area -->
 <ion-content>
-
 <form ng-submit="createTeam(user, team)">
     <div class="list">
         <label class="item item-input">
@@ -32,13 +30,15 @@
   </label>
 </div>
 <ion-list ng-show="team.search.length">
-  <ion-item ng-repeat="(key, user) in users | filter:team.search | filter:teamMembers" class="item item-icon-right item-avatar" ng-click="addUserToTeam(user, team)">
+  <ion-item ng-repeat="(key, user) in filterAddedUsers(users) | filter:team.search" class="item item-icon-right item-icon-left" ng-click="addUserToTeam(user, team)">
+    <i class="icon {{user.icon}}"></i>
     {{user.name}}
-    <i class="icon ion-chevron-right icon-accessory"></i>
+    <i class="icon ion-chevron-right"></i>
   </ion-item>
 </ion-list>
 <ion-list ng-show="teamMembers">
   <ion-item ng-repeat="member in teamMembers" class="item item-icon-right item-avatar">
+    <i class="icon {{member.icon}}"></i>
     {{member.name}}
   </ion-item>
 </ion-list>
@@ -47,7 +47,6 @@
         <button type="submit" class="button button-block button-positive">Create Team</button>
     </div>
 </form>
-
 </ion-content>
 
 </div>

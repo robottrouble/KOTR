@@ -9,7 +9,7 @@
       </div>
       <ion-item ng-repeat="teamId in user.teams" class="item item-icon-right item-avatar">
         {{teams.$getRecord(teamId).name}}
-        <i class="icon ion-chevron-right icon-accessory"></i>
+        <i class="icon ion-chevron-right"></i>
       </ion-item>
     </ion-list>
     <ion-list>
@@ -18,7 +18,7 @@
       </div>
       <ion-item ng-repeat="team in teams | filter:user.teams" class="item item-icon-right item-avatar">
         {{team.name}}
-        <i class="icon ion-chevron-right icon-accessory"></i>
+        <i class="icon ion-chevron-right"></i>
       </ion-item>
     </ion-list>
   </ion-content>

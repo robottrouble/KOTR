@@ -18,6 +18,19 @@ function getName(authData) {
   }
 }
 
+function getIcon(authData) {
+  switch(authData.provider) {
+       case 'google':
+         return 'ion-social-google'
+       case 'password':
+         return 'ion-ios-email';
+       case 'twitter':
+         return 'ion-social-twitter';
+       case 'facebook':
+         return 'ion-social-facebook';
+  }
+}
+
 kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
   $ionicConfigProvider.tabs.position('bottom')
   $stateProvider
@@ -111,6 +124,7 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
   $scope.teams = Teams;
   $scope.users = Users;
   $scope.checklists = Checklists;
+  $scope.teamMembers = [];
 
   $ionicModal.fromTemplateUrl('partials/new-team.html', function(modal) {
     $scope.teamModal = modal;
@@ -153,6 +167,12 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
     $scope.teamModal.hide();
     team.name = "";
   }
+
+  $scope.filterAddedUsers = function () {
+    return $scope.users.filter(function (user) {
+      return $scope.teamMembers.indexOf(user) == -1;
+    });
+  };
 })
 
 .controller('ChecklistCtrl', function($scope, $ionicModal, $stateParams, Checklists, Users) {
