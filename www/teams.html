@@ -1,4 +1,4 @@
-<ion-view title="Teams" left-buttons="leftButtons">
+<ion-view title="Teams" left-buttons="leftButtons" ng-controller="TeamCtrl">
   <ion-nav-buttons side="right">
     <button class="button button-clear icon ion-ios-plus-outline" ng-click="newTeam()"></button>
   </ion-nav-buttons>
@@ -7,8 +7,16 @@
       <div class="item item-divider">
         My Teams
       </div>
+      <ion-item ng-repeat="teamId in user.teams" class="item item-icon-right item-avatar">
+        {{teams.$getRecord(teamId).name}}
+        <i class="icon ion-chevron-right icon-accessory"></i>
+      </ion-item>
+    </ion-list>
+    <ion-list>
+      <div class="item item-divider">
+        All Teams
+      </div>
       <ion-item ng-repeat="team in teams" class="item item-icon-right item-avatar">
-        <img src="https://scontent-lga3-1.xx.fbcdn.net/hphotos-xap1/v/t1.0-0/c0.0.50.50/p50x50/11229899_10153461353534930_6648475697616430253_n.jpg?oh=88579c098bbeb6cb512add463898ee44&oe=5688DA0E">
         {{team.name}}
         <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>

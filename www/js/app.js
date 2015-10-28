@@ -5,6 +5,17 @@
 // the 2nd parameter is an array of 'requires'
 var kotr = angular.module("kotr", ["ionic", "firebase", "ngCordovaOauth"])
 
+function getName(authData) {
+  switch(authData.provider) {
+       case 'password':
+         return authData.password.email.replace(/@.*/, '');
+       case 'twitter':
+         return authData.twitter.displayName;
+       case 'facebook':
+         return authData.facebook.displayName;
+  }
+}
+
 kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
   $ionicConfigProvider.tabs.position('bottom')
   $stateProvider
@@ -79,14 +90,25 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
   return $firebaseArray(itemsRef);
 })
 
+.factory("Users", function($firebaseArray) {
+  var usersRef = new Firebase("https://brilliant-torch-531.firebaseio.com/users");
+  return $firebaseArray(usersRef);
+})
+
+.factory("UserDetails", function($firebaseArray) {
+  var usersRef = new Firebase("https://brilliant-torch-531.firebaseio.com/userdetails");
+  return $firebaseArray(usersRef);
+})
+
 .factory("Auth", function($firebaseAuth) {
   var usersRef = new Firebase("https://brilliant-torch-531.firebaseio.com/users");
   return $firebaseAuth(usersRef);
 })
 
-.controller('TeamCtrl', function($scope, $ionicModal, Teams, Auth) {
+.controller('TeamCtrl', function($scope, $ionicModal, Teams, Users, Auth) {
   $scope.teams = Teams;
-
+  $scope.users = Users;
+  console.log($scope.users);
   $ionicModal.fromTemplateUrl('partials/new-team.html', function(modal) {
     $scope.teamModal = modal;
   }, {
@@ -98,10 +120,20 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
     $scope.teamModal.show();
   }
 
-  $scope.createTeam = function(team) {
+  $scope.createTeam = function(user, team) {
+    console.log("user: " + user)
     $scope.teams.$add({
-      name: team.name
+      name: team.name,
+      owner: user.$id
+    }).then(function(ref) {
+
+      if (user.teams === null || user.teams === undefined)
+        user.teams = []
+
+      user.teams.push(ref.key());
+      Users.$save(user);
     });
+
     $scope.teamModal.hide();
     team.name = "";
   }
@@ -112,8 +144,9 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
   }
 })
 
-.controller('ChecklistCtrl', function($scope, $ionicModal, $stateParams, Checklists, Auth) {
+.controller('ChecklistCtrl', function($scope, $ionicModal, $stateParams, Checklists, Users) {
   $scope.checklists = Checklists;
+  $scope.users = Users;
   $scope.checklistId = $stateParams.checklistId;
   $scope.selectedChecklist = null;
 
@@ -230,7 +263,10 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
 
 })
 
-.controller('LoginCtrl', function($scope, $ionicModal, Checklists, Auth, $cordovaOauth, $ionicSideMenuDelegate) {
+.controller('LoginCtrl', function($scope, $ionicModal, Auth, Users, $cordovaOauth, $ionicSideMenuDelegate) {
+  var ref = new Firebase("https://brilliant-torch-531.firebaseio.com");
+  $scope.users = Users;
+  $scope.user = null;
 
   $scope.login = function() {
     console.log("login");
@@ -265,10 +301,21 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
     if (authData === null) {
       console.log("Not logged in yet");
     } else {
-      console.log("Logged in as", authData.uid);
+      $scope.users.$loaded().then(function() {
+        if (Users.$getRecord(authData.uid) === null) {
+          ref.child("users").child(authData.uid).set({
+            provider: authData.provider,
+            name: getName(authData)
+          });
+        }
+        $scope.user = Users.$getRecord(authData.uid);
+      });
     }
+    
     $scope.authData = authData; // This will display the user's name in our view
   };
+
+
 
   setTimeout(function() { Auth.$onAuth(onAuthCallback); }, 1200);
 
