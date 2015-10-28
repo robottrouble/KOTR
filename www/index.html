@@ -56,8 +56,11 @@
 <body ng-app="kotr">
   <div ng-controller="LoginCtrl">
     <div ng-hide="authData">
-      <button class="button button-block button-positive ion-social-facebook-outline" ng-click="login()">
+      <button class="button button-block button-positive ion-social-facebook-outline" ng-click="loginfb()">
         Log In with Facebook
+      </button>
+      <button class="button button-block button-assertive ion-social-google" ng-click="loging()">
+        Log In with Google
       </button>
     </div>
     <ion-nav-view animation="slide-left-right" ng-show="authData"></ion-nav-view>

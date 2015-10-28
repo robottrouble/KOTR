@@ -7,6 +7,8 @@ var kotr = angular.module("kotr", ["ionic", "firebase", "ngCordovaOauth"])
 
 function getName(authData) {
   switch(authData.provider) {
+       case 'google':
+         return authData.google.displayName;
        case 'password':
          return authData.password.email.replace(/@.*/, '');
        case 'twitter':
@@ -147,7 +149,7 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
     team.name = "";
   }
 
-  $scope.closeNewTeam = function() {
+  $scope.closeNewTeam = function(team) {
     $scope.teamModal.hide();
     team.name = "";
   }
@@ -277,9 +279,34 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
   $scope.users = Users;
   $scope.user = null;
 
-  $scope.login = function() {
+  $scope.loging = function() {
     console.log("login");
-    Auth.$authWithOAuthRedirect("facebook").then(function(authData) {
+
+    //Auth.$authWithOAuthRedirect("google", function(error) {
+    Auth.$authWithOAuthPopup("google").then(function(error, authData) {
+      console.log("logged in");
+    }).catch(function(error) {
+      console.log("error");
+      if (error.code === "TRANSPORT_UNAVAILABLE") {
+        console.log("transport unavailable");
+        $cordovaOauth.google("king-of-the-road-1112", ["https://www.googleapis.com/auth/urlshortener",
+          "https://www.googleapis.com/auth/userinfo.email"]).then(function(result) {
+            Auth.$authWithOAuthToken("facebook", result.access_token).then(function(authData) {
+                console.log(JSON.stringify(authData));
+            }, function(error) {
+                console.error("ERROR: " + error);
+            });
+        }, function(error) {
+            console.log("ERROR: " + error);
+        });
+      }
+    });
+    console.log("done");
+  }
+
+  $scope.loginfb = function() {
+    console.log("login");
+    Auth.$authWithOAuthPopup("facebook").then(function(authData) {
     console.log("logged in");
       // User successfully logged in
     }).catch(function(error) {
