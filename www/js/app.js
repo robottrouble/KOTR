@@ -105,10 +105,11 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
   return $firebaseAuth(usersRef);
 })
 
-.controller('TeamCtrl', function($scope, $ionicModal, Teams, Users, Auth) {
+.controller('TeamCtrl', function($scope, $ionicModal, Teams, Users, Auth, Checklists) {
   $scope.teams = Teams;
   $scope.users = Users;
-  console.log($scope.users);
+  $scope.checklists = Checklists;
+
   $ionicModal.fromTemplateUrl('partials/new-team.html', function(modal) {
     $scope.teamModal = modal;
   }, {
@@ -120,11 +121,19 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
     $scope.teamModal.show();
   }
 
+  $scope.addUserToTeam = function(user, team) {
+    if ($scope.teamMembers === null || $scope.teamMembers === undefined)
+      $scope.teamMembers = []
+    $scope.teamMembers.push(user);
+    team.search="";
+  }
+
   $scope.createTeam = function(user, team) {
     console.log("user: " + user)
     $scope.teams.$add({
       name: team.name,
-      owner: user.$id
+      owner: user.$id,
+      checklist: team.checklist
     }).then(function(ref) {
 
       if (user.teams === null || user.teams === undefined)
@@ -311,7 +320,7 @@ kotr.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider) {
         $scope.user = Users.$getRecord(authData.uid);
       });
     }
-    
+
     $scope.authData = authData; // This will display the user's name in our view
   };
 

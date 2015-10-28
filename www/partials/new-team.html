@@ -2,7 +2,7 @@
 
     <!-- Modal header bar -->
     <ion-header-bar class="bar-secondary">
-    <h1 class="title">New Team - {{user}}</h1>
+    <h1 class="title">New Team</h1>
     <button class="button button-clear button-positive" ng-click="closeNewTeam()">Cancel</button>
 </ion-header-bar>
 
@@ -15,6 +15,34 @@
             <input type="text" placeholder="Name" ng-model="team.name">
         </label>
     </div>
+    <div class="list">
+
+  <label class="item item-input item-select">
+    <div class="input-label">
+      Checklist
+    </div>
+    <select ng-model="team.checklist">
+      <option ng-repeat="(key, checklist) in checklists" value="{{key}}">{{checklist.title}}</option>
+    </select>
+  </label>
+</div>
+<div class="list">
+        <label class="item item-input">
+          <input type="search" ng-model="team.search" placeholder="User Search"/>
+  </label>
+</div>
+<ion-list ng-show="team.search.length">
+  <ion-item ng-repeat="(key, user) in users | filter:team.search | filter:teamMembers" class="item item-icon-right item-avatar" ng-click="addUserToTeam(user, team)">
+    {{user.name}}
+    <i class="icon ion-chevron-right icon-accessory"></i>
+  </ion-item>
+</ion-list>
+<ion-list ng-show="teamMembers">
+  <ion-item ng-repeat="member in teamMembers" class="item item-icon-right item-avatar">
+    {{member.name}}
+  </ion-item>
+</ion-list>
+
     <div class="padding">
         <button type="submit" class="button button-block button-positive">Create Team</button>
     </div>

@@ -16,7 +16,7 @@
       <div class="item item-divider">
         All Teams
       </div>
-      <ion-item ng-repeat="team in teams" class="item item-icon-right item-avatar">
+      <ion-item ng-repeat="team in teams | filter:user.teams" class="item item-icon-right item-avatar">
         {{team.name}}
         <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>
